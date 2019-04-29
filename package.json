@@ -11,11 +11,19 @@
   "author": "Brandon Cooke",
   "license": "ISC",
   "dependencies": {
+    "discord.js": "^11.4.2",
     "dotenv": "^7.0.0",
-    "typescript": "^3.4.5"
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "twitter": "^1.7.1",
+    "typescript": "^3.4.5",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/node": "^11.13.8",
+    "@types/winston": "^2.4.4",
     "gulp": "^4.0.1",
-    "gulp-typescript": "^5.0.1"
+    "gulp-typescript": "^5.0.1",
+    "tslint": "^5.16.0"
   }
 }
