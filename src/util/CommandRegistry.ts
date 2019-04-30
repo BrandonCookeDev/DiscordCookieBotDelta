@@ -32,6 +32,10 @@ export default class CommandRegistry{
 		return this.commands[commandName]
 	}
 
+	public addCommand(command: Command): void {
+		this.commands[command.getCommand()] = command
+	}
+
 	public add(commandName: string, command: Command): void {
 		this.commands[commandName] = command
 	}
