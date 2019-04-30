@@ -23,9 +23,17 @@ process.on('SIGTERM', killHandler)
 const path = require('path')
 require('dotenv').config({path: path.join(__dirname, '.env')})
 
-const Bot = require('./dist/Bot').default
+const Initializer = require('./dist/Initializer').default
+const Log = require('./dist/util/Logger')
 
 /* MAIN */
 ~async function main(){
-	await Bot.getInstance().startup()
+	try{
+		Log.info('Initializing cookiE-bot')
+		await Initializer.initialize()
+		return true 
+	} catch(e){
+		Log.error('Unexpected Error: %s\n%s', e.message, e);
+		return false
+	}
 }()

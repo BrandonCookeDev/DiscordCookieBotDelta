@@ -1,5 +1,7 @@
 import Discord from 'discord.js'
 import Config from './config/Config'
+import Message from './models/Message'
+import CommandRegistry from './util/CommandRegistry'
 import Log from './util/Logger'
 
 export default class Bot{
@@ -24,11 +26,19 @@ export default class Bot{
 	}
 
 	public async startup(){
+		Log.debug('Bot.startup called')
 		Log.info('Initializing bot connection...')
 		Log.debug('Using token: %s', Config.discord.token)
 		await this.client.login(Config.discord.token)
 		Log.info('Connected to Discord!')
 		this.client.user.setStatus('online')
+
+		this.client.on('message', this.parseMessage)
+	}
+
+	public parseMessage(message: Discord.Message){
+		Log.debug('Bot.parseMessage called: %s', message)
+
 	}
 
 }

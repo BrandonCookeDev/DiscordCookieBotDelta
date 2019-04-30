@@ -16,9 +16,9 @@ const TEST_CALLBACK_3 = (err: Error | undefined): string => {
 	return 'test callback 3'
 }
 
-const TEST_COMMAND_1 = new Command('test', TEST_CALLBACK_1, moment().toDate())
-const TEST_COMMAND_2 = new Command('helloworld', TEST_CALLBACK_2, moment().toDate())
-const TEST_COMMAND_3 = new Command('test callback 3', TEST_CALLBACK_3, moment().toDate())
+const TEST_COMMAND_1 = new Command('test', TEST_CALLBACK_1, moment().toDate().toISOString())
+const TEST_COMMAND_2 = new Command('helloworld', TEST_CALLBACK_2, moment().toDate().toISOString())
+const TEST_COMMAND_3 = new Command('test callback 3', TEST_CALLBACK_3, moment().toDate().toISOString())
 
 const EXPECTED_REGISTRY: {[x: string]: Command} = {
 	'test': TEST_COMMAND_1,
