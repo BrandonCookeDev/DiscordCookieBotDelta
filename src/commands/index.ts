@@ -5,12 +5,12 @@ const commands: IInformalCommand[] = []
 import help from './help'
 import helloworld from './sample/HelloWorld'
 import helloworldP from './sample/HelloWorldPromise'
-import helloworldC from './sample/HelloWorldParams'
+import add from './sample/Add'
 
 /* REGISTER COMMANDS HERE */
 commands.push(help)
+commands.push(add)
 commands.push(helloworld)
 commands.push(helloworldP)
-commands.push(helloworldC)
 
 export default commands
