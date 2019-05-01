@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import Discord, { TextBasedChannel } from 'discord.js'
 import Config from './config/Config'
 import Message from './models/Message'
@@ -27,8 +28,13 @@ export default class Bot{
 	constructor(){
 		this.client = new Discord.Client()
 		this.activeModes = []
+
 		this.startup = this.startup.bind(this)
 		this.parseMessage = this.parseMessage.bind(this)
+		this.activateMode = this.activateMode.bind(this)
+		this.deactiveMode = this.deactiveMode.bind(this)
+		this.findActiveMode = this.findActiveMode.bind(this)
+		this.isModeAlreadyActive = this.isModeAlreadyActive.bind(this)
 	}
 
 	public async startup(){
@@ -66,11 +72,23 @@ export default class Bot{
 	}
 
 	public activateMode(mode: Mode){
-		this.activeModes.push(mode)
+		if(!this.isModeAlreadyActive(mode))
+			this.activeModes.push(mode)
 	}
 
 	public deactiveMode(mode: Mode){
-		this.activeModes.splice(this.activeModes.indexOf(mode))
+		if(this.isModeAlreadyActive(mode)){
+			const target = this.findActiveMode(mode)[0]
+			this.activeModes.splice(this.activeModes.indexOf(target), 1)
+		}
+	}
+
+	public isModeAlreadyActive(mode: Mode){
+		return this.findActiveMode(mode).length > 0
+	}
+
+	public findActiveMode(mode: Mode): Mode[] {
+		return this.activeModes.filter((m: Mode) => m.constructor.name === mode.constructor.name)
 	}
 
 	/* GETTERS AND SETTERS */

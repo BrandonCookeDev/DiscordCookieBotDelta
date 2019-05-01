@@ -43,6 +43,10 @@ export default class Message {
 		return this.content.split(' ').slice(1)
 	}
 
+	public replyDirectly(message: string): void{
+		this.metadata.reply(message)
+	}
+
 	public toString(): string {
 		return format('[Message] {%s} %s: %s | Command: %s Args: %s',
 			this.timestamp,

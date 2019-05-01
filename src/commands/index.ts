@@ -10,6 +10,7 @@ import add from './math/Add'
 import sub from './math/Subtract'
 import mul from './math/Multiply'
 import div from './math/Divide'
+import shittalk from './modes/Shittalk'
 import HelpString from '../models/HelpString';
 
 // initialize help string
@@ -32,6 +33,7 @@ function addSection(sectionHeader: string, ...sectionCommands: IInformalCommand[
 
 /* REGISTER COMMANDS HERE */
 addCommand(help)
+addSection('Modes', shittalk)
 addSection('Maths', add, sub, mul, div)
 
 export default commands
