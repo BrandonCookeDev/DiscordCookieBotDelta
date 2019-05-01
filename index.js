@@ -23,8 +23,8 @@ process.on('SIGTERM', killHandler)
 const path = require('path')
 require('dotenv').config({path: path.join(__dirname, '.env')})
 
-const Initializer = require('./dist/Initializer').default
-const Log = require('./dist/util/Logger')
+const Initializer = require('./dist/config/Initializer').default
+const Log = require('./dist/util/Logger').default
 
 /* MAIN */
 ~async function main(){

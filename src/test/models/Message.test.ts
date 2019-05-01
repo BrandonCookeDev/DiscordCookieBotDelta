@@ -4,7 +4,6 @@ import Discord from 'discord.js'
 import Message from '../../models/Message'
 let clock = sinon.useFakeTimers()
 
-
 describe('Message model', () => {
 
 	beforeEach(setupEach)

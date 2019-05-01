@@ -1,14 +1,18 @@
 import moment from 'moment'
+import Logger from '../util/Logger';
+import { format } from 'util';
 
 export default class Command{
 
 	/* STATIC */
 	public static parse(command: string, callback: (...params: any)=>any){
-		return new Command(
+		const ret: Command = new Command(
 			command,
 			callback,
 			moment().utc().toDate().toISOString(),
 		)
+		Logger.debug('Command parsed: %s', ret)
+		return ret
 	}
 
 	/* INSTANCE */
@@ -26,6 +30,7 @@ export default class Command{
 		return this.callback(...params);
 	}
 
+	/* GETTERS AND SETTERS */
 	public getCommand(): string { return this.command }
 
 	public setCommand(command: string): void {
@@ -44,5 +49,7 @@ export default class Command{
 		this.timestamp = timestamp
 	}
 
-
+	public toString(): string {
+		return format('[Command] {%s} %s', this.timestamp, this.command)
+	}
 }

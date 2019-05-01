@@ -1,4 +1,4 @@
-import Discord from 'discord.js'
+import Discord, { TextBasedChannel } from 'discord.js'
 import Config from './config/Config'
 import Message from './models/Message'
 import CommandRegistry from './util/CommandRegistry'
@@ -34,11 +34,45 @@ export default class Bot{
 		this.client.user.setStatus('online')
 
 		this.client.on('message', this.parseMessage)
+		return true
 	}
 
-	public parseMessage(message: Discord.Message){
+	public async parseMessage(message: Discord.Message){
 		Log.debug('Bot.parseMessage called: %s', message)
+		const parsedMessage: Message = Message.parse(message)
+		if(!parsedMessage.isCommand()) return
+		Log.verbose('Command received: %s', parsedMessage)
 
+		const command = CommandRegistry.getInstance().get(parsedMessage.getCommand())
+		if(!command) return
+
+		const results = await Promise.resolve(command.execute(parsedMessage.getArgs()))
+		Log.verbose('results: %s', results)
+		message.channel.sendMessage(results)
+		return true
 	}
 
+	public async sendMessage(channel: Discord.Channel, message: string, options?: Discord.MessageOptions){
+		let doMessage;
+		switch(channel.type){
+			case 'text':
+				doMessage = (channel as Discord.TextChannel).sendMessage
+				break
+			case 'dm':
+				doMessage = (channel as Discord.DMChannel).sendMessage
+				break
+			case 'group':
+				doMessage = (channel as Discord.GroupDMChannel).sendMessage
+				break
+			case 'voice':
+			case 'category':
+				throw new Error('non text based channel type found! type: ' + channel.type)
+				break
+			default:
+				throw new Error('unknown channel type: ' + channel.type)
+		}
+
+		await doMessage(message, options)
+		return true
+	}
 }

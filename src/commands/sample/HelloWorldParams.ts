@@ -1,11 +1,11 @@
 import IInformalCommand from '../../interfaces/IInformalCommand'
 
 const command: IInformalCommand = {
-	name: 'helloworld',
-	callback: () => {
-		return 'helloworld'
+	name: 'helloworld_add',
+	callback: (a: number, b: number) => {
+		return a + b
 	},
-	helpString: 'test command',
+	helpString: 'test calculation',
 }
 
 export default command

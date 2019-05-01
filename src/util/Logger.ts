@@ -16,7 +16,7 @@ const Logger = winston.createLogger({
 	transports: [
 		new winston.transports.Console()
 	],
-	format: logformat
+	format: logformat,
 })
 
 export default Logger
