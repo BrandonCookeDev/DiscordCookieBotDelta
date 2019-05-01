@@ -4,6 +4,7 @@ import { format } from 'util';
 
 export default class Channel{
 
+	/* STATICS */
 	public static parse(data: Discord.TextChannel): Channel {
 		const ret: Channel = new Channel(
 			data.id,
@@ -15,6 +16,7 @@ export default class Channel{
 		return ret
 	}
 
+	/* INSTANCE */
 	private id: string
 	private type: string
 	private name: string
@@ -25,6 +27,10 @@ export default class Channel{
 		this.type = type
 		this.name = name
 		this.metadata = metadata
+	}
+
+	public toString(): string {
+		return format('[Channel] %s :: %s :: %s', this.name, this.id, this.type)
 	}
 
 	/* GETTERS AND SETTERS */
@@ -52,7 +58,4 @@ export default class Channel{
 		this.metadata = metadata
 	}
 
-	public toString(): string {
-		return format('[Channel] %s :: %s :: %s', this.name, this.id, this.type)
-	}
 }

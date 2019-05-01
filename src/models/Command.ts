@@ -31,6 +31,10 @@ export default class Command{
 		return this.callback(...params)
 	}
 
+	public toString(): string {
+		return format('[Command] {%s} %s', this.timestamp, this.command)
+	}
+
 	/* GETTERS AND SETTERS */
 	public getCommand(): string { return this.command }
 
@@ -50,7 +54,4 @@ export default class Command{
 		this.timestamp = timestamp
 	}
 
-	public toString(): string {
-		return format('[Command] {%s} %s', this.timestamp, this.command)
-	}
 }

@@ -43,6 +43,16 @@ export default class Message {
 		return this.content.split(' ').slice(1)
 	}
 
+	public toString(): string {
+		return format('[Message] {%s} %s: %s | Command: %s Args: %s',
+			this.timestamp,
+			this.user,
+			this.content,
+			this.getCommand(),
+			this.getArgs(),
+		)
+	}
+
 	/* GETTERS AND SETTERS */
 	public getUser(): string { return this.user }
 
@@ -66,16 +76,6 @@ export default class Message {
 
 	public setTimestamp(timestamp: string): void {
 		this.timestamp = timestamp
-	}
-
-	public toString(): string {
-		return format('[Message] {%s} %s: %s | Command: %s Args: %s',
-			this.timestamp,
-			this.user,
-			this.content,
-			this.getCommand(),
-			this.getArgs(),
-		)
 	}
 
 }
