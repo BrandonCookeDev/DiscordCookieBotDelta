@@ -5,14 +5,49 @@ import { format } from 'util';
 export default class Channel{
 
 	/* STATICS */
-	public static parse(data: Discord.TextChannel): Channel {
+	public static parse(data: Discord.Channel): Channel {
+		switch(data.type){
+			case 'text':
+				return Channel.parseTextChannel(data as Discord.TextChannel)
+			case 'dm':
+				return Channel.parseDMChannel(data as Discord.DMChannel)
+			case 'group':
+				return Channel.parseGroupChannel(data as Discord.GroupDMChannel)
+			default:
+				throw new Error('Unknown channel type found: ' + data.type)
+		}
+	}
+
+	private static parseTextChannel(data: Discord.TextChannel): Channel {
 		const ret: Channel = new Channel(
 			data.id,
 			data.type,
 			data.name,
 			data,
 		)
-		Log.debug('Channel parsed: %s', ret)
+		Log.debug('Channel(text) parsed: %s', ret)
+		return ret
+	}
+
+	private static parseDMChannel(data: Discord.DMChannel): Channel {
+		const ret: Channel = new Channel(
+			data.id,
+			data.type,
+			'dm: ' + data.recipient.username,
+			data,
+		)
+		Log.debug('Channel(dm) parsed: %s', ret)
+		return ret
+	}
+
+	private static parseGroupChannel(data: Discord.GroupDMChannel): Channel {
+		const ret: Channel = new Channel(
+			data.id,
+			data.type,
+			'group: ' + data.recipients.map((r: Discord.User) => r.username).join(','),
+			data,
+		)
+		Log.debug('Channel(dm) parsed: %s', ret)
 		return ret
 	}
 
@@ -20,13 +55,22 @@ export default class Channel{
 	private id: string
 	private type: string
 	private name: string
-	private metadata: Discord.TextChannel
+	private metadata: Discord.TextChannel | Discord.DMChannel | Discord.GroupDMChannel
 
-	constructor(id: string, type: string, name: string, metadata: TextChannel){
+	constructor(
+		id: string,
+		type: string,
+		name: string,
+		metadata: Discord.TextChannel | Discord.DMChannel | Discord.GroupDMChannel,
+	){
 		this.id = id
 		this.type = type
 		this.name = name
 		this.metadata = metadata
+	}
+
+	public send(message: string): void {
+		this.metadata.sendMessage(message)
 	}
 
 	public toString(): string {
@@ -52,9 +96,9 @@ export default class Channel{
 		this.name = name
 	}
 
-	public getMetadata(): Discord.TextChannel { return this.metadata }
+	public getMetadata(): Discord.TextChannel | Discord.DMChannel | Discord.GroupDMChannel { return this.metadata }
 
-	public setMetadata(metadata: Discord.TextChannel): void {
+	public setMetadata(metadata: Discord.TextChannel | Discord.DMChannel | Discord.GroupDMChannel): void {
 		this.metadata = metadata
 	}
 

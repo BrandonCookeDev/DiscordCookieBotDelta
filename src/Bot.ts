@@ -1,8 +1,10 @@
 import Discord, { TextBasedChannel } from 'discord.js'
 import Config from './config/Config'
 import Message from './models/Message'
+import Mode from './models/Mode'
 import CommandRegistry from './util/CommandRegistry'
 import Log from './util/Logger'
+import Channel from './models/Channel';
 
 export default class Bot{
 
@@ -19,10 +21,14 @@ export default class Bot{
 	}
 
 	/* INSTANCE */
-	public client: Discord.Client
+	private client: Discord.Client
+	private activeModes: Mode[] = []
 
 	constructor(){
 		this.client = new Discord.Client()
+		this.activeModes = []
+		this.startup = this.startup.bind(this)
+		this.parseMessage = this.parseMessage.bind(this)
 	}
 
 	public async startup(){
@@ -38,8 +44,15 @@ export default class Bot{
 	}
 
 	public async parseMessage(message: Discord.Message){
+		// receive message
 		Log.debug('Bot.parseMessage called: %s', message)
 		const parsedMessage: Message = Message.parse(message)
+		const parsedChannel: Channel = Channel.parse(message.channel as Discord.TextChannel)
+
+		// feed message and channel to the active modes
+		this.activeModes.forEach((mode: Mode) => mode.doEffect(parsedMessage, parsedChannel))
+
+		// discard if not a command
 		if(!parsedMessage.isCommand()) return
 		Log.verbose('Command received: %s', parsedMessage)
 
@@ -48,31 +61,28 @@ export default class Bot{
 
 		const results = await Promise.resolve(command.execute(parsedMessage.getArgs()))
 		Log.verbose('results: %s', results)
-		message.channel.sendMessage(results)
+		parsedChannel.send(results)
 		return true
 	}
 
-	public async sendMessage(channel: Discord.Channel, message: string, options?: Discord.MessageOptions){
-		let doMessage;
-		switch(channel.type){
-			case 'text':
-				doMessage = (channel as Discord.TextChannel).sendMessage
-				break
-			case 'dm':
-				doMessage = (channel as Discord.DMChannel).sendMessage
-				break
-			case 'group':
-				doMessage = (channel as Discord.GroupDMChannel).sendMessage
-				break
-			case 'voice':
-			case 'category':
-				throw new Error('non text based channel type found! type: ' + channel.type)
-				break
-			default:
-				throw new Error('unknown channel type: ' + channel.type)
-		}
+	public activateMode(mode: Mode){
+		this.activeModes.push(mode)
+	}
 
-		await doMessage(message, options)
-		return true
+	public deactiveMode(mode: Mode){
+		this.activeModes.splice(this.activeModes.indexOf(mode))
+	}
+
+	/* GETTERS AND SETTERS */
+	public getClient(): Discord.Client { return this.client }
+
+	public setClient(client: Discord.Client): void {
+		this.client = client
+	}
+
+	public getActiveModes(): Mode[] { return this.activeModes }
+
+	public setActiveModes(activeModes: Mode[]): void {
+		this.activeModes = activeModes
 	}
 }
