@@ -13,8 +13,6 @@ export default class Initializer{
 		// initialize bot
 		await Bot.getInstance().startup()
 
-		// initialize help string
-		const helpString = HelpString.getInstance()
 
 		// populate the registry
 		const registry = CommandRegistery.getInstance()
@@ -22,7 +20,6 @@ export default class Initializer{
 			const command = Command.parse(informalCommand.name, informalCommand.callback)
 			registry.add(informalCommand.name, command)
 			Log.info('Registered command: %s', informalCommand.name)
-			helpString.add(informalCommand.name, informalCommand.helpString)
 		})
 
 		return true

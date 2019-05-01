@@ -7,7 +7,12 @@ export default class HelpString{
 	/* STATICS */
 	public static getInstance(): HelpString{
 		if(!HelpString.initialized){
-			const versionLine = 'cookiE-bot Delta 1.0.0\n------------'
+			const versionLine = format(
+				HelpString.headerLine,
+				'cookiE-bot Delta',
+				'1.0.0',
+				HelpString.seperator,
+			)
 			HelpString.instance = new HelpString([versionLine])
 			HelpString.initialized = true
 		}
@@ -29,7 +34,9 @@ export default class HelpString{
 		return spaces.join(' ')
 	}
 
-	private static spaceLimit = 40
+	private static headerLine = '%s %s\n%s'
+	private static seperator = '----------------'
+	private static spaceLimit = 25
 	private static helpStringFormat: string = '%s::%s%s'
 	private static instance: HelpString
 	private static initialized: boolean = false
@@ -41,7 +48,7 @@ export default class HelpString{
 		this.helpString = helpString
 	}
 
-	public add(commandName: string, helpString: string){
+	public add(commandName: string, helpString: string): void {
 		this.helpString.push(
 			format(
 				HelpString.helpStringFormat,
@@ -50,6 +57,12 @@ export default class HelpString{
 				helpString,
 			),
 		)
+	}
+
+	public addHeader(header: string): void {
+		this.helpString.push('')
+		this.helpString.push(header)
+		this.helpString.push('----------------')
 	}
 
 	public toString(): string {

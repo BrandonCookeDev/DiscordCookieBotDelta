@@ -7,7 +7,7 @@ const command: IInformalCommand = {
 		numbers.forEach((num: string) => answer -= parseInt(num))
 		return answer
 	},
-	helpString: 'subtract numbers:: params <numbers>',
+	helpString: '**params <numbers>** :: subtract numbers',
 }
 
 export default command

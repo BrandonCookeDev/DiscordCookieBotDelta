@@ -1,13 +1,13 @@
 import IInformalCommand from '../../interfaces/IInformalCommand'
 
 const command: IInformalCommand = {
-	name: 'divide',
+	name: 'add',
 	callback: (numbers: any[]): number => {
-		let answer = numbers.shift()
-		numbers.forEach((num: string) => answer /= parseInt(num))
+		let answer = 0
+		numbers.forEach((num: string) => answer += parseInt(num))
 		return answer
 	},
-	helpString: 'divide numbers:: params <numbers>',
+	helpString: '**params <numbers>** :: add numbers',
 }
 
 export default command
