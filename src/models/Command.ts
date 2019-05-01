@@ -27,7 +27,8 @@ export default class Command{
 	}
 
 	public execute(...params: any[]): any {
-		return this.callback(...params);
+		Logger.debug('execute called: %s', params)
+		return this.callback(...params)
 	}
 
 	/* GETTERS AND SETTERS */
